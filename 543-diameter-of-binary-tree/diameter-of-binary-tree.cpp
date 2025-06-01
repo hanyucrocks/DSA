@@ -17,9 +17,10 @@ public:
         return dia;
     }
     int height(TreeNode* root, int &dia){
-        if(root==NULL) return 0;
+        if(root == NULL) return 0;
         int l = height(root->left, dia);
         int r = height(root->right, dia);
-        dia=max(dia, l +r); return 1+max(l, r);
+        dia = max(dia, l+r);
+        return 1 + max(r, l);
     }
 };
