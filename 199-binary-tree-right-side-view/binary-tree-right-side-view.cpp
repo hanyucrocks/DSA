@@ -13,7 +13,7 @@ class Solution {
 public:
     void solve(TreeNode* root, int lvl, vector<int> &ds){
         if(root == NULL) return;
-        if(lvl==ds.size()) ds.push_back(root->val);
+        if(lvl == ds.size()) ds.push_back(root->val);
         solve(root->right, lvl+1, ds);
         solve(root->left, lvl+1, ds);
     }
