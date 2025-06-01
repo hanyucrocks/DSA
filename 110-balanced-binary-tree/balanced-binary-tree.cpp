@@ -12,14 +12,14 @@
 class Solution {
 public:
     bool isBalanced(TreeNode* root) {
-        return dfsheight(root)!=-1;
+        return helper(root) != -1;
     }
-    int dfsheight(TreeNode* root){
-        if(root==NULL) return 0;
-        int l = dfsheight(root->left);
-        if(l==-1) return -1;
-        int r = dfsheight(root->right);
-        if(r==-1) return -1;
-        if(abs(l-r)>1) return -1; return max(l, r) + 1;
+    int helper(TreeNode* root){
+        if(root == NULL) return 0;
+        int l = helper(root->left);
+        int r = helper(root->right);
+        if(l == -1 || r == -1) return -1;
+        if(abs(l - r) > 1) return -1;
+        return 1 + max(l, r);
     }
 };
