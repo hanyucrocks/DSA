@@ -3,7 +3,7 @@ public:
     void dfs(int node, vector<vector<int>> &adj, vector<int> &vis){
         vis[node] = 1;
         for(int it = 0; it < adj.size(); it++){
-            if(adj[node][it] == 1 && !vis[it]){
+            if(!vis[it] && adj[node][it] == 1){
                 dfs(it, adj, vis);
             }
         }
