@@ -17,7 +17,7 @@ public:
             }
         }
         int tm = 0;
-        int delCol[] = {-1, 0, +1, 0};
+        int delCol[] = {+1, 0, -1, 0};
         int delRow[] = {0, +1, 0, -1};
         while(!q.empty()){
             int r = q.front().first.first;
