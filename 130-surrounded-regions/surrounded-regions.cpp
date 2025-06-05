@@ -1,41 +1,39 @@
 class Solution {
 public:
-    void solve(vector<vector<char>>& board) {
-        int m = board.size();
-        int n = board[0].size();
-        queue<pair<int, int>> q;
+    void dfs(int row, int col, vector<vector<int>> &vis, vector<vector<char>> &mat, int delrow[], int delcol[]){
+        vis[row][col] = 1;
+        int n = mat.size();
+        int m = mat[0].size();
 
-        auto bfs = [&](int row, int col){
-            q.push({row, col});
-            board[row][col] = '#';
-            
-            int delRow [] = {-1, 0, +1, 0};
-            int delCol [] = {0, +1, 0, -1};
-            while(!q.empty()){
-                auto [r, c] = q.front(); q.pop();
-                for(int i = 0; i < 4; i++){
-                    int nr = r+delRow[i];
-                    int nc = c + delCol[i];
-                    if(nr >= 0 && nr < m && nc>=0 && nc< n && board[nr][nc]=='O'){
-                        q.push({nr, nc});
-                        board[nr][nc] = '#';
-                    }
-                }
+        for(int i = 0; i < 4; i++){
+            int nrow = row + delrow[i];
+            int ncol = col + delcol[i];
+            if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m && !vis[nrow][ncol] && mat[nrow][ncol] == 'O'){
+                dfs(nrow, ncol, vis, mat, delrow, delcol);
             }
-        };
-        // start bfs from border Os
-        for(int i = 0; i < m; i++){
-            if(board[i][0]=='O') bfs(i, 0); // first col
-            if(board[i][n-1]=='O') bfs(i, n-1); // last col
         }
-        for(int j = 0; j < n; j++){
-            if(board[0][j] == 'O') bfs(0, j); // first row
-            if(board[m-1][j] == 'O') bfs(m-1, j);
+    }
+    void solve(vector<vector<char>>& board) {
+        int n = board.size();
+        int m = board[0].size();
+        int delrow[] = {-1, 0, +1, 0};
+        int delcol[] = {0, -1, 0, +1};
+        vector<vector<int>> vis(n, vector<int> (m, 0));
+        // first row and last row
+        for(int j = 0; j < m; j++){
+            //first row
+            if(!vis[0][j] && board[0][j] == 'O') dfs(0, j, vis, board, delrow, delcol);
+            // last row
+            if(!vis[n-1][j] && board[n-1][j] == 'O') dfs(n-1, j, vis, board, delrow, delcol);
         }
-        for(int i = 0; i < m; i++){
-            for(int j = 0; j < n; j++){
-                if(board[i][j] == 'O') board[i][j] ='X';
-                else if(board[i][j] == '#') board[i][j] = 'O';
+        // now coloums
+        for(int i = 0; i < n; i++){
+            if(!vis[i][0] && board[i][0] == 'O') dfs(i, 0, vis, board, delrow, delcol);
+            if(!vis[i][m-1] && board[i][m-1] == 'O') dfs(i, m-1, vis, board, delrow, delcol);
+        }
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(!vis[i][j] && board[i][j] == 'O') board[i][j] = 'X';
             }
         }
     }
