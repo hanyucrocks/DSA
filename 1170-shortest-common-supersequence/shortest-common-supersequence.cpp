@@ -33,7 +33,7 @@ public:
         int j = m;
         while(i > 0 && j > 0){
             if(str1[i-1] == str2[j-1]){
-                ans += str1[i-1];
+                ans += str2[j-1];
                 i--; j--;
             }
             else if(dp[i-1][j] > dp[i][j-1]){
