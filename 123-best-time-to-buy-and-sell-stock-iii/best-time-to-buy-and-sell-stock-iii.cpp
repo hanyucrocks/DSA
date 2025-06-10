@@ -34,25 +34,27 @@ public:
         */
 
         int n = prices.size();
-        vector<vector<vector<int>>> dp(
-            n+1, vector<vector<int>>(2, vector<int>(3, 0)));
+        vector<vector<int>> after(2, vector<int> (3, 0));
+        vector<vector<int>> cur(2, vector<int> (3, 0));
         // return f(0, 1, 2, prices, dp);
         // tabulation now
         // cap == 0, ind buy is antyhing
+        // after and cur approach -> dp[ind+1] = after
         for(int ind = n - 1; ind>= 0; ind--){
             for(int buy = 0; buy <= 1; buy++){
                 for(int cap = 1; cap <= 2; cap++){
                     long profit = 0;
                     if (buy)
-            profit = max(-prices[ind] + dp[ind+1][0][cap],
-                         dp[ind+1][1][cap]);
+            profit = max(-prices[ind] + after[0][cap],
+                         after[1][cap]);
         else
-            profit = max(prices[ind] + dp[ind+1][1][cap-1],
-                         dp[ind+1][0][cap]);
-        dp[ind][buy][cap] = profit;
+            profit = max(prices[ind] +after[1][cap-1],
+                         after[0][cap]);
+        cur[buy][cap] = profit;
                 }
             }
+            after = cur;
         }
-        return dp[0][1][2];
+        return after[1][2];
     }
 };
