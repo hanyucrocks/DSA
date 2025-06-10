@@ -22,6 +22,6 @@ public:
                 dp[ind][prev_ind+1] = len;
             }
         }
-        return dp[0][-1+1];
+        return dp[0][0];
     }
 };
