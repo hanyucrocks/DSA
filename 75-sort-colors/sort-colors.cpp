@@ -2,19 +2,16 @@ class Solution {
 public:
     void sortColors(vector<int>& nums) {
         int n = nums.size();
-        int maxi = *max_element(nums.begin(), nums.end());
-        vector<int> arr(maxi + 1, 0);
+        int cnt0 = 0, cnt1=0, cnt2=0;
         for(int i = 0; i < n; i++){
-            arr[nums[i]]++;
+            if(nums[i]==0) cnt0++;
+            else if(nums[i]==1) cnt1++;
+            else cnt2++;
         }
-        for(int i = 1; i <= maxi; i++){
-            arr[i] += arr[i-1];
-        }
-        vector<int> output(n);
-        for(int i = n - 1; i >= 0; i--){
-            output[arr[nums[i]] - 1] = nums[i];
-            arr[nums[i]]--;
-        }
-        nums = output;
+        int ind = 0;
+        // now, just loop and overwrite
+        for(int i = 0; i < cnt0; i++) nums[ind++] = 0;
+        for(int i = 0; i < cnt1; i++) nums[ind++] = 1;
+        for(int i = 0; i < cnt2; i++) nums[ind++] = 2;
     }
 };
