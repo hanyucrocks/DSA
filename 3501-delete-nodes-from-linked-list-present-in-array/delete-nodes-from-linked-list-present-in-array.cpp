@@ -12,7 +12,7 @@ class Solution {
 public:
     ListNode* modifiedList(vector<int>& nums, ListNode* head) {
 
-        set<int> list(nums.begin(), nums.end());
+        unordered_set<int> list(nums.begin(), nums.end());
         ListNode* dummy = new ListNode(0);
         dummy->next=head;
         ListNode* prev = dummy;
