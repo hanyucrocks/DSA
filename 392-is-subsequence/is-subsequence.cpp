@@ -1,15 +1,19 @@
 class Solution {
 public:
     bool isSubsequence(string s, string t) {
-        int i = 0, j = 0;
-        while(i < s.size() && j < t.size()){
-        if(s[i] == t[j]){
-            i++;
-            j++;
+        // two pointer approach
+        int n = s.size();
+        int m = t.size();
+        int i, j;
+        i = 0, j = 0;
+        while(i < n and j < m){
+            if(s[i] == t[j]){
+                i++, j++;
+            }
+            else{
+                j++;
+            }
         }
-        else j++;
-        }
-        if(i == s.size()) return true;
-        else return false;
+        return i == n;
     }
 };
