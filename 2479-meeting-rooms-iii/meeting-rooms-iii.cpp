@@ -1,44 +1,60 @@
 class Solution {
 public:
+    typedef pair<long long, int> P;
+    // bool comp( const vector<int> &a, const vector<int> &b){
+    //     return a[0] > b[0];
+    // }
     int mostBooked(int n, vector<vector<int>>& meetings) {
-    sort(meetings.begin(), meetings.end());
+        /*
+        duration = meeting[1] - meeting[0];
+        duration
+        start = meeting[0], end = meeting[1]
+        */
+        // for(auto &meeting : meetings){
+        //     int start = meeting[0], end = meeting[1];
+        // }
+        int m = meetings.size();
+        sort(meetings.begin(), meetings.end());
+        vector<int> roomsUsedCount(n, 0);
+        priority_queue<P, vector<P>, greater<P>> usedRooms;
+        priority_queue<int, vector<int>, greater<int>> availableRooms;
 
-    // Free rooms by room index
-    priority_queue<int, vector<int>, greater<>> freeRooms;
-    for (int i = 0; i < n; ++i)
-        freeRooms.push(i);
-
-    // Busy rooms: (endTime, roomNumber)
-    priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<>> busy;
-
-    vector<int> roomCount(n, 0);
-
-    for (auto& m : meetings) {
-        long long start = m[0], end = m[1];
-
-        // Free up rooms whose meetings have ended by start time
-        while (!busy.empty() && busy.top().first <= start) {
-            freeRooms.push(busy.top().second);
-            busy.pop();
+        for(int room = 0; room < n; room++){
+            availableRooms.push(room);
         }
-
-        if (!freeRooms.empty()) {
-            int room = freeRooms.top(); freeRooms.pop();
-            ++roomCount[room];
-            busy.emplace(end, room);
-        } else {
-            // Delay meeting: use room that gets free first
-            auto [endTime, room] = busy.top(); busy.pop();
-            ++roomCount[room];
-            busy.emplace(endTime + (end - start), room);
+        // now lets start
+        for(vector<int> &meet:meetings){
+            int start = meet[0];
+            int end = meet[1];
+            long long duration = end-start;
+            while(!usedRooms.empty() and usedRooms.top().first <= start){
+                int room = usedRooms.top().second;
+                usedRooms.pop();
+                availableRooms.push(room);
+            }
+            if(!availableRooms.empty()){
+                int room = availableRooms.top();
+                availableRooms.pop();
+                usedRooms.push({end, room});
+                roomsUsedCount[room]++;
+            }
+            else{
+                // no room found, pick earlist one
+                int room = usedRooms.top().second;
+                long long endTime = usedRooms.top().first;
+                usedRooms.pop();
+                usedRooms.push({endTime + duration, room});
+                roomsUsedCount[room]++;
+            }
         }
+        long long resultRoom = - 1;
+        long long maxUse = 0;
+        for(int room  = 0; room < n; room++){
+            if(roomsUsedCount[room] > maxUse){
+                maxUse = roomsUsedCount[room];
+                resultRoom = room;
+            }
+        }
+        return resultRoom;
     }
-
-    int maxMeetings = *max_element(roomCount.begin(), roomCount.end());
-    for (int i = 0; i < n; ++i)
-        if (roomCount[i] == maxMeetings)
-            return i;
-
-    return -1; // should not reach here
-}
 };
