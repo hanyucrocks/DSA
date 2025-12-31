@@ -42,7 +42,7 @@ public:
 
         */
         R = row, C = col;
-        int left = 0, right = row * col;
+        int left = 0, right = cells.size() - 1;
         int ans = 0;
         while(left <= right){
             int mid = left + ((right-left)/2);
