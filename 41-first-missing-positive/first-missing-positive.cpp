@@ -20,12 +20,23 @@ public:
         //     if(hash.find(k)==hash.end()) return k;
         //     k =k+1;
         // }
-        vector<bool> present(n, false);
-        for(int num : nums){
-            if(1 <= num and num <= n) present[num] = true;
+        // vector<bool> present(n, false);
+        // for(int num : nums){
+        //     if(1 <= num and num <= n) present[num] = true;
+        // }
+        // for(int i = 1; i <=n; i++){
+        //     if(present[i] == false) return i;
+        // }
+        // return n+1;
+        for(int i = 0 ; i < n; i++){
+            while(
+                nums[i] >= 1 and nums[i] <= n and nums[nums[i] - 1] != nums[i]
+            ){
+                swap(nums[i], nums[nums[i] - 1]);
+            }
         }
-        for(int i = 1; i <=n; i++){
-            if(present[i] == false) return i;
+        for(int i = 0; i < n; i++){
+            if(nums[i]!=i+1) return i+1;
         }
         return n+1;
     }
