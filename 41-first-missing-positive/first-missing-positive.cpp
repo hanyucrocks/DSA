@@ -12,13 +12,21 @@ public:
         //     else return k;
         // }
         // return k;
-        unordered_set<int> hash;
-        for(int x : nums){
-            if(x > 0)hash.insert(x);
+        // unordered_set<int> hash;
+        // for(int x : nums){
+        //     if(x > 0)hash.insert(x);
+        // }
+        // while(true){
+        //     if(hash.find(k)==hash.end()) return k;
+        //     k =k+1;
+        // }
+        vector<bool> present(n, false);
+        for(int num : nums){
+            if(1 <= num and num <= n) present[num] = true;
         }
-        while(true){
-            if(hash.find(k)==hash.end()) return k;
-            k =k+1;
+        for(int i = 1; i <=n; i++){
+            if(present[i] == false) return i;
         }
+        return n+1;
     }
 };
