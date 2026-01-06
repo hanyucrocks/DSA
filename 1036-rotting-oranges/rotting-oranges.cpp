@@ -1,42 +1,44 @@
 class Solution {
 public:
     int orangesRotting(vector<vector<int>>& grid) {
-        int n = grid.size();
-        int m = grid[0].size();
-        queue<pair<pair<int, int>, int>> q;
-        vector<vector<int>> vis(n, vector<int> (m, 0));
-        for(int i = 0; i < n; i++){
-            for(int j = 0; j < m; j++){
+        int m = grid.size();
+        int n = grid[0].size();
+        vector<vector<int>> dirs = {{-1, 0}, {+1, 0}, {0, -1}, {0, +1}};
+        // vector<vector<bool> vis(m, vector<bool> (n, false));
+        queue<pair<int, int>> q;
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
                 if(grid[i][j] == 2){
-                    q.push({{i, j}, 0});
-                    vis[i][j] = 2;
+                    q.push({i, j}); // all the rotten oranges are pushed now.
                 }
-                else vis[i][j] = 0;
             }
         }
-        int timemax = 0;
-        int delCol[] = {-1, 0, +1, 0};
-        int delRow[] = {0, +1, 0, -1};
+        int mins = 0;
         while(!q.empty()){
-            int row = q.front().first.first;
-            int col = q.front().first.second;
-            int time = q.front().second;
-            timemax = max(timemax, time);
-            q.pop();
-            for(int i = 0; i < 4; i++){
-                int nrow = row + delRow[i];
-                int ncol = col + delCol[i];
-                if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m && grid[nrow][ncol] == 1 && vis[nrow][ncol] != 2){
-                    q.push({{nrow, ncol}, time + 1});
-                    vis[nrow][ncol] = 2;
+            int sz = q.size();
+            bool rotted = false;
+            while(sz--){
+                auto [x, y] = q.front();
+                q.pop();
+                for(auto &d : dirs){
+                    int nr = x + d[0];
+                    int nc = y + d[1];
+                    if(nr >= 0 and nr < m and nc >= 0 and nc < n and grid[nr][nc] == 1){
+                        grid[nr][nc] = 2; // rot this piece./
+                        q.push({nr, nc});
+                        rotted = true;
+                        // vis[nr][nc] = 1;
+                    }
                 }
             }
+            if(rotted) mins++;
         }
-        for(int i = 0; i < n; i++){
-            for(int j = 0; j < m; j++){
-                if(vis[i][j]!=2 && grid[i][j] == 1) return -1;
+        // final check here. if the rotten never happens.
+        for(int i = 0; i < m; i++){
+            for(int j  = 0; j < n; j++){
+                if(grid[i][j] == 1) return -1;
             }
         }
-        return timemax;
+        return mins;
     }
 };
