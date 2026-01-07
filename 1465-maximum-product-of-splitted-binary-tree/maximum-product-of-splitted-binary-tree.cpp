@@ -13,6 +13,7 @@ class Solution {
 public: 
     long long totalSum = 0;
     long long ans = 0;
+        const int mod = 1e9+7;
     void getotal(TreeNode* root){
         if(!root) return;
         totalSum += root->val;
@@ -25,11 +26,10 @@ public:
         long long right = dfs(root->right);
         long long subtreesum = left + right + root->val;
         ans = max(ans, subtreesum * (totalSum - subtreesum));
-        return subtreesum;
+        return subtreesum % mod;
     }
     int maxProduct(TreeNode* root) {
         if(!root) return 0;
-        const int mod = 1e9+7;
         /*
         remove one edge.. such that product of the sums of the subtrees. ..wow
         kuch palle ni pad rhaaaa hainnnnn
