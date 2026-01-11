@@ -1,19 +1,24 @@
 class Solution {
 public:
     vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
-       unordered_map<int, int> mpp;
-       stack<int> st;
-       int n = nums2.size();
-       for(int i = n - 1; i >= 0; i--){
-        while(!st.empty() && st.top()<=nums2[i]) st.pop();
-        if(st.empty()) mpp[nums2[i]] = -1;
-        else mpp[nums2[i]] = st.top();
-        st.push(nums2[i]);
-       }
-       vector<int> ans;
-       for(int sex : nums1){
-        ans.push_back(mpp[sex]);
-       }
-       return ans;
+        int n = nums1.size();
+        int m = nums2.size();
+        unordered_map<int, int> mp;
+        // heights[st.top] >= heights[i]
+        stack<int> st;
+        // vector<int> nge(m);
+        for(int i = m - 1; i>=0; i--){
+            while(!st.empty() and st.top() <= nums2[i]) st.pop();
+            if(st.empty()){
+                mp[nums2[i]] = -1;
+            }
+            else mp[nums2[i]] = st.top();
+            st.push(nums2[i]); // hhere the nge is completeled, it will output 3 4 -1 -1..
+        }
+        vector<int> ans;
+        for(int num : nums1){
+            ans.push_back(mp[num]);
+        }
+        return ans;
     }
 };
