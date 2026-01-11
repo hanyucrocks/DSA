@@ -7,11 +7,11 @@ public:
         stack<int> st;
         for(int i = 2 * n - 1; i>=0; i--){
             int idx = i % n;
-            while(!st.empty() and nums[st.top()] <= nums[idx]) st.pop();
+            while(!st.empty() and st.top() <= nums[idx]) st.pop();
             if(i < n){
-                if(!st.empty()) ans[idx] = nums[st.top()];
+                if(!st.empty()) ans[idx] = st.top();
             }
-            st.push(idx);
+            st.push(nums[idx]);
         }
         return ans;
     }
