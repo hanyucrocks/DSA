@@ -1,25 +1,21 @@
 class Solution {
 public:
+    bool isVowel(char c){
+        c = tolower(c);
+        return c == 'a' or c == 'e' or c=='i' or c=='o' or c=='u';
+    }
     string reverseVowels(string s) {
-        string ans;
         int n = s.size();
-        ans.reserve(n);
-        // reverse the a e i o u or A E I O U
-        string vowels = "";
-        for(int i = n - 1; i >= 0; i--){
-            if(s[i] == 'a' or s[i] == 'e' or s[i] == 'i' or s[i] == 'o' or s[i] == 'u' or s[i] == 'A' or s[i] == 'E' or s[i] == 'I' or s[i] == 'O' or s[i] == 'U'){
-                vowels.push_back(s[i]);
-            } 
-        }
-        // AeeI
-        int j = 0; // pointer for vowels
-        for(int i = 0; i < n; i++){
-            if(s[i] == 'a' or s[i] == 'e' or s[i] == 'i' or s[i] == 'o' or s[i] == 'u' or s[i] == 'A' or s[i] == 'E' or s[i] == 'I' or s[i] == 'O' or s[i] == 'U'){
-                ans += vowels[j];
-                j++;
+        int l = 0, r = n - 1;
+        while(l < r){
+            while(l < r and !isVowel(s[l])) l++;
+            while(l < r and !isVowel(s[r])) r--;
+            if(l < r){
+                swap(s[l], s[r]);
+                l++;
+                r--;
             }
-            else ans += s[i];
         }
-        return ans;
+        return s;
     }
 };
