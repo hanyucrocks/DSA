@@ -1,15 +1,26 @@
 class Solution {
 public:
     string reverseWords(string s) {
-        stringstream ss(s);
-        string word;
+        int n = s.size();
+        // getline?... magic hour
         vector<string> words;
-        while(ss >> word) words.push_back(word);
-        string res;
-        for(int i = words.size() - 1; i >= 0; i--){
-            res += words[i];
-            if(i!= 0) res += " ";
+        int i = 0;
+        while(i < n){
+            while(i < n and s[i] == ' ') i++;
+            if(i >= n) break;
+                string word = "";
+            while(i < n and s[i] != ' '){
+                word.push_back(s[i]);
+                i++;
+            }
+            words.push_back(word);
         }
-        return res;
+        reverse(words.begin(), words.end());
+        string ans = "";
+        for(int i = 0; i < (int)words.size(); i++){
+            ans += words[i];
+            if(i != words.size() - 1) ans += " "; 
+        }
+        return ans;
     }
 };
