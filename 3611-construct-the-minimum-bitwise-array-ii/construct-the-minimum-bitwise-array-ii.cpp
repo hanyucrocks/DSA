@@ -11,7 +11,7 @@ public:
             }
             int t = 0;
             int temp = x;
-            while(temp > 0 and (temp & 1)){
+            while((temp & 1)){
                 t++;
                 temp >>= 1;
             }
