@@ -6,14 +6,15 @@ public:
         sort(nums.begin(), nums.end());
         // now two pointers
         int l = 0, r = n - 1;
-        vector<int> pairs;
+        int maxsum = INT_MIN;
         while(l < r){
             int pair = nums[l] + nums[r];
-            pairs.push_back(pair);
+            // pairs.push_back(pair);
             l++;
             r--;
+            maxsum = max(maxsum, pair);
         }
-        return *max_element(pairs.begin(), pairs.end());
+        return maxsum;
 
     }
 };
