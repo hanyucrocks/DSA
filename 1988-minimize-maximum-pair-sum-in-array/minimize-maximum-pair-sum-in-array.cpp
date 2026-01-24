@@ -2,15 +2,18 @@ class Solution {
 public:
     int minPairSum(vector<int>& nums) {
         int n = nums.size();
+        // int pairs = n/2;
         sort(nums.begin(), nums.end());
-        int i= 0, j = n- 1;
-        int maxsum = INT_MIN;
-        while(i <= j){
-            int sum = nums[i] + nums[j];
-            i++;
-            j--;
-            maxsum = max(maxsum, sum);
+        // now two pointers
+        int l = 0, r = n - 1;
+        vector<int> pairs;
+        while(l < r){
+            int pair = nums[l] + nums[r];
+            pairs.push_back(pair);
+            l++;
+            r--;
         }
-        return maxsum;
+        return *max_element(pairs.begin(), pairs.end());
+
     }
 };
