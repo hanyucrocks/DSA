@@ -1,40 +1,36 @@
 class Solution {
 public:
+    vector<vector<int>> dirs = {{+1, 0}, {-1, 0},  {0, +1},  {0, -1},
+                                {1, 1},  {-1, -1}, {+1, -1}, {-1, +1}};
+
     int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
-        int n = grid.size(), m = grid[0].size();
-        if (grid[0][0] == 1 || grid[n-1][m-1] == 1) return -1;
-
-        queue<pair<int, pair<int, int>>> q;
-        vector<vector<int>> dist(n, vector<int>(m, 1e9));
-        dist[0][0] = 1;
-        q.push({1, {0, 0}});
-
-        int direction[8][2] = {
-            {1, 0}, {0, 1}, {-1, 0}, {0, -1},
-            {1, 1}, {-1, -1}, {1, -1}, {-1, 1}
-        };
-
+        int n = grid.size();
+        if (grid[0][0] == 1 or grid[n - 1][n - 1] == 1)
+            return -1;
+        // src is 0, 0, dest is n - 1, n - 1;
+        queue<pair<int, int>> q;
+        q.push({0, 0});
+        // thats the intro
+        int steps = 1;
+        grid[0][0] = 1;
         while (!q.empty()) {
-            auto it = q.front(); q.pop();
-            int dis = it.first;
-            int r = it.second.first;
-            int c = it.second.second;
-
-            if (r == n - 1 && c == m - 1) return dis;
-
-            for (int i = 0; i < 8; i++) {
-                int newr = r + direction[i][0];
-                int newc = c + direction[i][1];
-
-                if (newr >= 0 && newr < n && newc >= 0 && newc < m && 
-                    grid[newr][newc] == 0 && dis + 1 < dist[newr][newc]) {
-                    
-                    dist[newr][newc] = dis + 1;
-                    q.push({dis + 1, {newr, newc}});
+            int sz = q.size();
+            while (sz--) {
+                auto [r, c] = q.front();
+                q.pop();
+                if (r == n - 1 and c == n - 1)
+                    return steps;
+                for (auto& d : dirs) {
+                    int nr = r + d[0];
+                    int nc = c + d[1];
+                    if(nr >= 0 and nr < n and nc >= 0 and nc < n and grid[nr][nc] == 0){
+                        q.push({nr, nc});
+                        grid[nr][nc] = 1;
+                    }
                 }
             }
+            steps++;
         }
-
         return -1;
     }
 };
