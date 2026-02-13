@@ -63,6 +63,7 @@ public:
         // case 3 now
         int cntA = 0, cntB = 0, cntC = 0;
         unordered_map<string, int> diffMap2;
+        diffMap2["0_0"] = -1;
         for(int i = 0; i < n; i++){
             if(s[i] == 'a') cntA++;
             if(s[i] == 'b') cntB++;
