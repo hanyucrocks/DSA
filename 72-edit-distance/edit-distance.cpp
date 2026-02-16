@@ -1,38 +1,28 @@
 class Solution {
 public:
     int f(int i, int j, string &s1, string &s2, vector<vector<int>> &dp){
-    if(j < 0) return i + 1;
-    if(i < 0) return j + 1;
-    if(dp[i][j] != -1) return dp[i][j];
-
-    if(s1[i] == s2[j]){
-        return dp[i][j] = f(i-1, j-1, s1, s2, dp);
-    } else {
-        int ins = 1 + f(i, j-1, s1, s2, dp);     // insert
-        int del = 1 + f(i-1, j, s1, s2, dp);     // delete
-        int rep = 1 + f(i-1, j-1, s1, s2, dp);   // replace
-        return dp[i][j] = min({ins, del, rep});
-    }
-}
-
-    int minDistance(string word1, string word2) {
-        int n = word1.size();
-        int m = word2.size();
-        vector<vector<int>> dp(n+1, vector<int> (m+1, 0));
-        for(int i = 0; i <= n; i++) dp[i][0] = i;
-        for(int j = 0; j <= m; j++) dp[0][j] = j;
-        // base cases done
-        for(int i = 1; i <= n; i++){
-            for(int j = 1; j <= m; j++){
-                if(word1[i-1]==word2[j-1]) dp[i][j] = dp[i-1][j-1];
-                else{
-                    int ins = 1+dp[i][j-1];
-                    int del = 1+dp[i-1][j];
-                    int rep = 1+dp[i-1][j-1];
-                    dp[i][j] = min({ins, del, rep});
-                }
-            }
+        int n = s1.size();
+        int m = s2.size();
+        if(i == n) return m - j;
+        if(j == m) return n - i;
+        if(dp[i][j] != -1) return dp[i][j];
+        // now lets start the cases
+        if(s1[i] == s2[j]) dp[i][j] = f(i+1, j+1, s1, s2, dp);
+        else{
+            // case1, insert
+            int case1 = 1 +f(i, j+1, s1, s2, dp);
+            // case 2, delete
+            int case2 = 1 +f(i+1, j, s1, s2, dp);
+            // case3, replace
+            int case3 = 1 + f(i+1, j+1, s1, s2, dp);
+            dp[i][j] = min({case1, case2, case3});
         }
-        return dp[n][m];
+        return dp[i][j];
+    }
+    int minDistance(string word1, string word2) {
+        int n =word1.size();
+        int m = word2.size();
+        vector<vector<int>> dp(n, vector<int> (m, -1));
+        return f(0, 0, word1, word2, dp);
     }
 };
