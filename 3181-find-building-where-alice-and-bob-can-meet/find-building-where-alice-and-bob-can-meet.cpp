@@ -1,74 +1,67 @@
 class Solution {
-    vector<int> segTree;
-    int n;
-    void buildTree(int i, int l, int r, vector<int> &arr){
+    void buildTree(int i, int l ,int r, int st[], vector<int> &heights){
         if(l==r){
-            segTree[i] = l;
+            st[i] = l;
             return;
         }
         int mid = (l+r)/2;
-        buildTree(2*i+1, l, mid, arr);
-        buildTree(2*i+2, mid+1, r, arr);
-        int leftIdx = segTree[2*i+1];
-        int rightIdx = segTree[2*i+2];
-        if(arr[leftIdx] >= arr[rightIdx]) segTree[i] = leftIdx;
-        else segTree[i] = rightIdx;
+        buildTree(2*i+1, l, mid, st, heights);
+        buildTree(2*i+2, mid+1, r,st, heights);
+        int leftIdx = st[2*i+1];
+        int rightIdx = st[2*i+2];
+        if(heights[leftIdx] >= heights[rightIdx]) st[i] = leftIdx;
+        else st[i] = rightIdx;
     }
-    int query(int start, int end, int i, int l, int r, vector<int> &arr){
+    int* constructST(vector<int> &heights, int n){
+        int *segTree = new int[4*n];
+        buildTree(0, 0, n - 1, segTree, heights);
+        return segTree;
+    }
+    int RMIQ(int st[], vector<int> &heights, int n, int start, int end){
+        return query(start, end, 0, 0, n - 1, st, heights);
+    }
+    int query(int start, int end, int i, int l, int r, int st[], vector<int> &heights){
         if(l > end or r < start) return -1;
-        if(l >= start and r <= end) return segTree[i];
+        if(l >= start and r <= end) return st[i]; // it will return idx of max element
         int mid = (l+r)/2;
-        int LMI = query(start, end, 2*i+1, l, mid, arr);
-        int RMI = query(start, end, 2*i+2, mid+1, r, arr);
+        int LMI = query(start, end, 2 * i + 1, l, mid, st, heights);
+        int RMI = query(start, end, 2 * i + 2, mid+1, r, st, heights);
         if(LMI == -1) return RMI;
         if(RMI == -1) return LMI;
-        if(arr[LMI] >= arr[RMI]) return LMI;
+        if(heights[LMI] >= heights[RMI]) return LMI;
         else return RMI;
     }
 public:
     vector<int> leftmostBuildingQueries(vector<int>& heights, vector<vector<int>>& queries) {
-        n = heights.size();
-        segTree.assign(4*n, 0);
-        buildTree(0, 0, n - 1, heights);
-        // tree is done
+        int n = heights.size();
+        int *segTree = constructST(heights, n);
         vector<int> ans;
         for(auto &q : queries){
-            int start = q[0];
-            int end = q[1];
-            // start and end
-            if(start > end) swap(start, end);
-            if(start == end){
-                ans.push_back(start);
+            int min_idx = min(q[0], q[1]);
+            int max_idx = max(q[0], q[1]);
+            if(min_idx == max_idx){
+                ans.push_back(min_idx);
                 continue;
             }
-            if(heights[end] > heights[start]){
-                ans.push_back(end);
+            else if(heights[max_idx] > heights[min_idx]){
+                ans.push_back(max_idx);
                 continue;
             }
-            int L = end + 1;
-            int R = n - 1;
-            if(L > R){
-                ans.push_back(-1);
-                continue;
-            }
-            int threshold = max(heights[end], heights[start]);
-            int RMIQ = query(L, R, 0, 0, n - 1, heights);
-            if(heights[RMIQ] <= threshold){
-                ans.push_back(-1);
-                continue;
-            }
+            // dono hints wale done
             else{
-                    int firstIdx = -1;
-                while(L <= R){
-                    int mid = (L+R)/2;
-                    int idx = query(L, mid, 0, 0, n - 1, heights);
-                    if(idx !=-1 and heights[idx] > threshold){
+                int l = max_idx + 1;
+                int r = n - 1;
+                int firstIdx = -1;
+                while(l <= r){
+                    int mid = (l+r)/2;
+                    int idx = RMIQ(segTree, heights, n, l, mid);
+                    if(idx != -1 and heights[idx] > max(heights[min_idx], heights[max_idx])){
                         firstIdx = idx;
-                        R = mid-1;
+                        r = mid-1;
                     }
-                    else L = mid+1;
+                    else l = mid+1;
                 }
-            ans.push_back(firstIdx);
+                ans.push_back(firstIdx);
             }
         }
         return ans;
