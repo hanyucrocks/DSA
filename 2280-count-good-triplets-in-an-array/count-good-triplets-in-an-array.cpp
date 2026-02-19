@@ -47,7 +47,7 @@ public:
         updateST(0, 0, n - 1, m[nums1[0]]); // ye update kardega segtree ko
         for(int i = 1; i < n; i++){
             int idx = m[nums1[i]]; // idx in nums2
-            long long leftCommonCount = query(0, idx, 0, 0, n - 1);
+            long long leftCommonCount = query(0, idx - 1, 0, 0, n - 1);
             long long leftUnCommonCount = i - leftCommonCount;
             long long elementsAfterIdxNums2 = (n - 1 -idx);
             long long rightCommonCount = elementsAfterIdxNums2-leftUnCommonCount;
