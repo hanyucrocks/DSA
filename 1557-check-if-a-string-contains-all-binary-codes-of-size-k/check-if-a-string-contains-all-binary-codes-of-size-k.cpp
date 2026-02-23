@@ -8,6 +8,6 @@ public:
         for(int i = 0; i <= n - k; i++){
             st.insert(s.substr(i, k));
         }
-        return st.size() == pow(2, k);
+        return st.size() == (1 << k);
     }
 };
