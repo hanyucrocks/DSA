@@ -10,18 +10,18 @@
  * };
  */
 class Solution {
-public:
-    bool isLeaf(TreeNode* node) {
-    return node->left == nullptr && node->right == nullptr;
-}
-    int dfs(TreeNode* node, int currentVal){
-        if(!node) return 0;
-        currentVal = currentVal * 2 + node->val;
-        if(isLeaf(node)) return currentVal;
-        return dfs(node->left, currentVal) + dfs(node->right, currentVal);
+    bool isLeaf(TreeNode *node){
+        return node->left == nullptr and node->right == nullptr;
     }
+    int dfs(TreeNode *root, int currentVal){
+        if(!root) return 0;
+        currentVal = currentVal * 2 + root->val;
+        if(isLeaf(root)) return currentVal;
+        return dfs(root->left, currentVal) + dfs(root->right, currentVal);
+    }
+public:
     int sumRootToLeaf(TreeNode* root) {
-        if(root == NULL) return 0;
+        if(!root) return 0;
         return dfs(root, 0);
     }
 };
